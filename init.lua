@@ -19,6 +19,11 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins")
+require("mason").setup()
+require("mason-lspconfig").setup()
 require('lualine').setup()
+
+-- add setup of lsp servers via lspconfig
+require("lspconfig").pyright.setup {}
 
 vim.cmd[[colorscheme tokyonight]]

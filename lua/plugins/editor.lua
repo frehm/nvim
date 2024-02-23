@@ -29,5 +29,10 @@ return {
             indent = { enable = true },  
           })
       end
+   },
+   {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "neovim/nvim-lspconfig",
    }
 }
