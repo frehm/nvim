@@ -29,3 +29,10 @@ keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 
 -- save file
 keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
+
+-- LSP stuff
+keymap.set('n', '<space>e', vim.diagnostic.open_float, { desc = "Show diagnostics" })
+
+-- TODO: Ideally set these up on LspAttach
+--https://github.com/neovim/nvim-lspconfig
+keymap.set('n', 'K', vim.lsp.buf.hover, { desc = "Show symbol info" })
