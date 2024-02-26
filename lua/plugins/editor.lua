@@ -1,4 +1,26 @@
 return {
+  { "williamboman/mason.nvim" },
+  { "williamboman/mason-lspconfig.nvim" },
+  {
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'v3.x',
+    lazy = true,
+    config = false,
+  },
+  { 
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      {'hrsh7th/cmp-nvim-lsp'},
+    }
+  },
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      {'L3MON4D3/LuaSnip'}
+    },
+  },
+  {'L3MON4D3/LuaSnip'},
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
@@ -30,9 +52,4 @@ return {
           })
       end
    },
-   {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
-      "neovim/nvim-lspconfig",
-   }
 }
