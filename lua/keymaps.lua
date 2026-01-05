@@ -4,9 +4,6 @@ local map = vim.keymap.set
 map({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 map({ 'n' }, 'q', '<Nop>', { silent = true })
 
--- use netrw for now, but switch to snacks explorer later
-map("n", "<leader>e", vim.cmd.Ex, { desc = "Open netrw explorer" })
-
 -- better up/down (respect line wraps)
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
@@ -22,8 +19,8 @@ map("n", "<C-k>", "<C-w>k", { desc = "Go to upper window", remap = true })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to lower window", remap = true })
 
 -- Center cursor on screen when scrolling
-map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down, and center cursor" }) 
-map("n", "<C-u>", "<C-u>zz", { desc = "Scroll up, and center cursor" }) 
+-- map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down, and center cursor" }) 
+-- map("n", "<C-u>", "<C-u>zz", { desc = "Scroll up, and center cursor" }) 
 
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line(s) down" })
 map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line(s) up" })
@@ -43,7 +40,7 @@ map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
-map("n", "<leader>bd", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+-- map("n", "<leader>bd", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 
 -- save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })

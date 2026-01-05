@@ -40,13 +40,54 @@ require("lazy").setup({
        config = true, -- not needed to load since lazy is not true?
     },
 
+    -- snacks.nvim
+    {
+        "folke/snacks.nvim",
+        priority = 1000,
+        lazy = false,
+        ---@type snacks.Config
+        opts = {
+            explorer = { enabled = true },
+            indent = { enabled = true },
+            picker = { enabled = true },
+            notifier = {
+                enabled = true,
+                timeout = 3000,
+            },
+            -- show file as quickly as possible when nvim some_file.ext
+            quickfile = { enabled = true },
+            -- smooth scrolling animation
+            scroll = { enabled = true },
+            -- TODO: enable scope after adding tree-sitter
+            -- scope = { enabled = true },
+        },
+        keys = {
+            -- Top Pickers & Explorer
+            { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+            { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
+            { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
+            { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
+            { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
+            { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+            { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+            -- find
+            { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+            { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+            { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+            { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
+            { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+            { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+            -- other
+            { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
+        }
+    },
     -- which-key
     {
         'folke/which-key.nvim',
         event = 'VimEnter', -- Sets the loading event to 'VimEnter'
         opts_extend = { "spec" },
         opts = {
-            preset = "modern",
+            preset = "helix",
             -- delay between pressing a key and opening which-key (milliseconds)
             -- this setting is independent of vim.o.timeoutlen
             delay = 0,
