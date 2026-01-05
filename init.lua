@@ -1,5 +1,8 @@
 require("options")
 require("keymaps")
+require("autocmds")
+
+vim.g.have_nerd_font = true
 
 if vim.g.neovide then
    vim.o.guifont = "Cascadia Mono:h12"
@@ -18,51 +21,57 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins")
-require('lualine').setup()
+require("lazy").setup({
+    -- tokyonight
+    {
+        "folke/tokyonight.nvim",
+        priority = 1000, -- make sure to load first
+        opts = { style = "moon" },
+        config = function(_, opts)
+            require("tokyonight").setup(opts)
 
-vim.cmd.colorscheme('tokyonight')
+            vim.cmd.colorscheme('tokyonight')
+        end
+    },
 
-local lsp_zero = require('lsp-zero')
+    -- mini.icons
+    { 'nvim-mini/mini.icons', 
+        version = '*' ,
+       config = true, -- not needed to load since lazy is not true?
+    },
 
-lsp_zero.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({buffer = bufnr})
-end)
+    -- which-key
+    {
+        'folke/which-key.nvim',
+        event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+        opts_extend = { "spec" },
+        opts = {
+            preset = "modern",
+            -- delay between pressing a key and opening which-key (milliseconds)
+            -- this setting is independent of vim.o.timeoutlen
+            delay = 0,
+            icons = {
+                -- set icon mappings to true if you have a Nerd Font
+                mappings = vim.g.have_nerd_font,
+            },
 
-require('mason').setup({})
-require('mason-lspconfig').setup({
-  handlers = {
-    lsp_zero.default_setup,
-    lua_ls = function()
-      -- (Optional) configure lua language server
-      local lua_opts = lsp_zero.nvim_lua_ls()
-      require('lspconfig').lua_ls.setup(lua_opts)
-    end,
-  }
+            -- Document existing key chains
+            spec = {
+                { '<leader>s', group = '[S]earch' },
+                { '<leader>t', group = '[T]oggle' },
+                { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+            },
+            },
+            keys = {
+            {
+                "<leader>?",
+                function()
+                require("which-key").show({ global = false })
+                end,
+                desc = "Buffer Keymaps (which-key)",
+            },
+        },
+    }, -- which-key
+
 })
 
-local cmp = require('cmp')
-local cmp_action = lsp_zero.cmp_action()
-
-cmp.setup({
-  mapping = cmp.mapping.preset.insert({
-    -- `Enter` key to confirm completion
-    ['<CR>'] = cmp.mapping.confirm({select = false}),
-
-    -- Ctrl+Space to trigger completion menu
-    ['<C-Space>'] = cmp.mapping.complete(),
-
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-
-    -- Scroll up and down in the completion documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-  })
-})
-
--- add setup of lsp servers via lspconfig
--- require("lspconfig").pyright.setup {}
