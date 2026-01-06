@@ -20,21 +20,45 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- register axaml files as xml
+vim.filetype.add({
+	extension = {
+		axaml = "xml",
+	},
+})
+
+function string.starts(String,Start)
+   return string.sub(String,1,string.len(Start))==Start
+end
+
 -- start treesitter, install parser if not already installed
 vim.api.nvim_create_autocmd({ 'Filetype' }, {
+  group = augroup("treesitter"),
   callback = function(event)
+    local ft = vim.bo[event.buf].ft
+
+    -- dont't try to start treesitter for snacks plugins
+    if string.starts(ft, "snacks_") then return end
+        
     -- make sure nvim-treesitter is loaded
     local ok, nvim_treesitter = pcall(require, 'nvim-treesitter')
 
     -- no nvim-treesitter, maybe fresh install
-    if not ok then return end
+    if not ok or not nvim_treesitter.install then return end
 
-    local parsers = require('nvim-treesitter.parsers')
-
-    if not parsers[event.match] or not nvim_treesitter.install then return end
-
-    local ft = vim.bo[event.buf].ft
+    -- get language for filetype, since they aren't always the same
     local lang = vim.treesitter.language.get_lang(ft)
+
+    -- check if parser is available for language
+    local parsers = require('nvim-treesitter.parsers')
+    if not lang or not parsers[lang] then
+        vim.notify('Parser not available for ft/lang: ' .. ft .. '/' .. lang)
+        return
+    end
+     
+    -- install, if not already installed, then start treesitter
+    vim.notify('Starting treesitter for ft/lang: ' .. ft .. '/' .. lang)
+
     nvim_treesitter.install({ lang }):await(function(err)
       if err then
         vim.notify('Treesitter install error for ft: ' .. ft .. ' err: ' .. err)
