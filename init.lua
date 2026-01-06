@@ -112,7 +112,15 @@ require("lazy").setup({
                 desc = "Buffer Keymaps (which-key)",
             },
         },
-    }, -- which-key
+    },
+
+    -- nvim-treesitter
+    {
+        'nvim-treesitter/nvim-treesitter',
+        lazy = false,
+        branch = "main",
+        build = ':TSUpdate',
+    }
 
 })
 
