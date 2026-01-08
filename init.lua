@@ -70,6 +70,7 @@ require("lazy").setup({
             { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
             { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
             { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+            { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
             -- find
             { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
             { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
@@ -124,3 +125,5 @@ require("lazy").setup({
 
 })
 
+-- enable language servers
+vim.lsp.enable("basedpyright")
