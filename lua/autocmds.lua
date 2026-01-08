@@ -71,3 +71,45 @@ vim.api.nvim_create_autocmd({ 'Filetype' }, {
     end)
   end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'cs',
+  callback = function(args)
+    vim.notify("Starting LSP...")
+
+    local root_dir = vim.fs.root(args.buf, function(name, path)
+        return name:match('%.csproj$') ~= nil
+    end)
+
+    vim.lsp.start({
+      name = 'csharp-language-server',
+      cmd = {'csharp-language-server'},
+      root_dir = root_dir,
+    })
+  end,
+})
+
+-- add keymaps when attaching lsp
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = augroup("lsp"),
+  callback = function(event)
+    local bufmap = function(mode, rhs, lhs)
+      vim.keymap.set(mode, rhs, lhs, {buffer = event.buf})
+    end
+
+    vim.notify("LSP attached, adding keymaps...")
+
+    bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+    bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+    bufmap('n', 'gI', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+    bufmap('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>')
+    bufmap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+    bufmap('n', 'gO', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
+    bufmap({'i', 's'}, 'gK', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+
+    bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
+    bufmap('n', 'gY', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+    bufmap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+    bufmap({'n', 'x'}, '<leader>cf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
+  end,
+})
