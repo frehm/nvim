@@ -35,10 +35,13 @@ require("lazy").setup({
     },
 
     -- mini.icons
-    { 'nvim-mini/mini.icons', 
-        version = '*' ,
+    { 'nvim-mini/mini.icons',
+        version = '*',
        config = true, -- not needed to load since lazy is not true?
     },
+
+    -- mini.completion
+    { 'nvim-mini/mini.completion', version = '*', config = true },
 
     -- snacks.nvim
     {
