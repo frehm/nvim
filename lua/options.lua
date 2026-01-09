@@ -37,3 +37,14 @@ opt.wrap = false
 
 opt.shadafile = "NONE" -- Disable shada file (no persistent history)
 opt.swapfile = false -- Disable swapfile (use git etc. for recovery)
+
+-- show diagnostics inline if true
+-- TODO: Add a toggle for this
+vim.diagnostic.config({
+  virtual_text = true,
+})
+
+-- vim.opt.foldtext = ""
+-- vim.opt.foldlevel = 99
+-- vim.opt.foldlevelstart = 1
+-- vim.opt.foldnestmax = 4
