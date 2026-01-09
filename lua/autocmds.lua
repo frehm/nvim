@@ -93,23 +93,60 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('LspAttach', {
   group = augroup("lsp"),
   callback = function(event)
-    local bufmap = function(mode, rhs, lhs)
-      vim.keymap.set(mode, rhs, lhs, {buffer = event.buf})
+    local bufmap = function(mode, rhs, lhs, desc)
+      vim.keymap.set(mode, rhs, lhs, {buffer = event.buf, desc = desc})
     end
 
     vim.notify("LSP attached, adding keymaps...")
 
-    bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-    bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
-    bufmap('n', 'gI', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-    bufmap('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>')
-    bufmap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-    bufmap('n', 'gO', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
-    bufmap({'i', 's'}, 'gK', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+    bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', 'LSP Hover Documentation')
+    bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', 'LSP References')
+    bufmap('n', 'gI', '<cmd>lua vim.lsp.buf.implementation()<cr>', 'Goto Implementation')
+    bufmap('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', 'LSP Rename Symbol')
+    bufmap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'LSP Code Action')
+    bufmap('n', 'gO', '<cmd>lua vim.lsp.buf.document_symbol()<cr>', 'LSP Document Symbols')
+    bufmap({'i', 's'}, 'gK', '<cmd>lua vim.lsp.buf.signature_help()<cr>', 'LSP Signature Help')
 
-    bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-    bufmap('n', 'gY', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-    bufmap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-    bufmap({'n', 'x'}, '<leader>cf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
+    bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', 'Goto Definition')
+    bufmap('n', 'gY', '<cmd>lua vim.lsp.buf.type_definition()<cr>', 'Goto T[y]pe Definition')
+    bufmap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', 'Goto Declaration')
+    bufmap({'n', 'x'}, '<leader>cf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format')
+
+    -- doesn't work?
+    bufmap('n', '<leader>ud', '<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>', 'Toggle Inlay Hints')
+
+    -- bufmap('i', '<C-space>', '<cmd>lua vim.lsp.completion.trigger()<cr>', 'LSP Completion Trigger')
+
   end,
 })
+
+-- vim.opt.completeopt = {'menu', 'menuone', 'noinsert', 'noselect'}
+--
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   desc = 'Enable vim.lsp.completion',
+--   callback = function(event)
+--     local client_id = vim.tbl_get(event, 'data', 'client_id')
+--     if client_id == nil then
+--       return
+--     end
+--
+--     vim.notify("Enabling LSP completion...")
+--
+--     vim.lsp.completion.enable(true, client_id, event.buf, {autotrigger = true})
+--
+--   end
+-- })
+
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   desc = 'Enable inlay hints',
+--   callback = function(event)
+--     local id = vim.tbl_get(event, 'data', 'client_id')
+--     local client = id and vim.lsp.get_client_by_id(id)
+--     if client == nil or not client.supports_method('textDocument/inlayHint') then
+--       return
+--     end
+--
+--     vim.notify("Enabling LSP inlay hints...")
+--     vim.lsp.inlay_hint.enable(true, {bufnr = event.buf})
+--   end,
+-- })
