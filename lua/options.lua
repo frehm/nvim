@@ -34,3 +34,6 @@ opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift t
 
 opt.linebreak = true -- Wrap lines at convenient points
 opt.wrap = false
+
+opt.shadafile = "NONE" -- Disable shada file (no persistent history)
+opt.swapfile = false -- Disable swapfile (use git etc. for recovery)
